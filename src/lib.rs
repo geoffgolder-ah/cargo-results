@@ -28,8 +28,8 @@ named!(
             str::from_utf8
         ) >>
     (vec![Suite {
-        name: "unknown",
-        state: "fail",
+        name: "unknown".to_string(),
+        state: "fail".to_string(),
         total: 1,
         passed: 0,
         failed: 1,

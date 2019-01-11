@@ -31,8 +31,8 @@ test tests::it_should_parse_first_line ... ok
     assert_done(
         result,
         vec![Suite {
-            name: "target/debug/cargo_test_junit-83252957c74e106d",
-            state: "pass",
+            name: "target/debug/cargo_test_junit-83252957c74e106d".to_string(),
+            state: "pass".to_string(),
             tests: vec![
                 Test {
                     name: "tests::it_should_match_failed".to_string(),
@@ -98,8 +98,8 @@ error: test failed";
         x,
         vec![
             Suite {
-                name: "target/debug/deps/docker_command-be014e20fbd07382",
-                state: "pass",
+                name: "target/debug/deps/docker_command-be014e20fbd07382".to_string(),
+                state: "pass".to_string(),
                 passed: 0,
                 failed: 0,
                 ignored: 0,
@@ -108,8 +108,8 @@ error: test failed";
                 tests: vec![]
             },
             Suite {
-                name: "target/debug/integration_test-d4fc68dd5824cbb9",
-                state: "fail",
+                name: "target/debug/integration_test-d4fc68dd5824cbb9".to_string(),
+                state: "fail".to_string(),
                 passed: 1,
                 failed: 2,
                 ignored: 0,
@@ -167,8 +167,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out";
         cargo_test_result_parser(output),
         vec![
             Suite {
-                name: "target/debug/deps/foo-5a7be5d1b9c8e0f6",
-                state: "pass",
+                name: "target/debug/deps/foo-5a7be5d1b9c8e0f6".to_string(),
+                state: "pass".to_string(),
                 passed: 0,
                 failed: 0,
                 ignored: 0,
@@ -177,8 +177,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out";
                 tests: vec![]
             },
             Suite {
-                name: "target/debug/integration_test-283604d1063344ba",
-                state: "pass",
+                name: "target/debug/integration_test-283604d1063344ba".to_string(),
+                state: "pass".to_string(),
                 passed: 1,
                 failed: 0,
                 ignored: 0,
@@ -193,8 +193,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out";
                 ]
             },
             Suite {
-                name: "foo",
-                state: "pass",
+                name: "foo".to_string(),
+                state: "pass".to_string(),
                 passed: 0,
                 failed: 0,
                 ignored: 0,
@@ -316,8 +316,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
         cargo_test_result_parser(output),
         vec![
             Suite {
-                name: "target/debug/deps/libzfs_sys-a797c24cd4b4a7ea",
-                state: "pass",
+                name: "target/debug/deps/libzfs_sys-a797c24cd4b4a7ea".to_string(),
+                state: "pass".to_string(),
                 passed: 3,
                 failed: 0,
                 ignored: 0,
@@ -342,8 +342,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
                 ]
             },
             Suite {
-                name: "libzfs-sys",
-                state: "pass",
+                name: "libzfs-sys".to_string(),
+                state: "pass".to_string(),
                 passed: 0,
                 failed: 0,
                 ignored: 0,
@@ -500,8 +500,8 @@ To learn more, run the command again with --verbose.
         cargo_test_result_parser(output),
         vec![
             Suite {
-                name: "unknown",
-                state: "fail",
+                name: "unknown".to_string(),
+                state: "fail".to_string(),
                 passed: 0,
                 failed: 1,
                 ignored: 0,

@@ -17,9 +17,9 @@ pub struct Test {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Suite<'a, 'b> {
-    pub name: &'a str,
-    pub state: &'b str,
+pub struct Suite {
+    pub name: String,
+    pub state: String,
     pub passed: i64,
     pub failed: i64,
     pub ignored: i64,
@@ -32,12 +32,12 @@ fn find_message_by_name(name: &str, failures: &Vec<Failure>) -> Option<String> {
     failures.iter().find(|x| x.name == name).map(|x| x.error.to_string())
 }
 
-fn handle_parsed_suite<'a, 'b, 'e>(
-    name: &'a str,
+fn handle_parsed_suite(
+    name: String,
     tests: Vec<Test>,
-    failures: Option<Vec<Failure<'e, 'e>>>,
-    result: SuiteResult<'b>,
-) -> Suite<'a, 'b> {
+    failures: Option<Vec<Failure>>,
+    result: SuiteResult,
+) -> Suite {
     let tests_with_failures = match failures {
         Some(xs) => {
             tests
@@ -57,7 +57,7 @@ fn handle_parsed_suite<'a, 'b, 'e>(
     Suite {
         name: name,
         tests: tests_with_failures,
-        state: result.state,
+        state: result.state.to_string(),
         total: result.total,
         passed: result.passed,
         failed: result.failed,
@@ -120,7 +120,7 @@ named!(
         tests: test_results >>
         failures: fail_opt >>
         result: suite_result >>
-        (handle_parsed_suite(name, tests, failures, result))
+        (handle_parsed_suite(name.to_string(), tests, failures, result))
     )
 );
 
