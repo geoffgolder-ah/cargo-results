@@ -1,65 +1,14 @@
+mod header;
+mod utility_parsers;
+
 #[macro_use]
 extern crate nom;
+
 use std::str;
 
 use nom::{line_ending, digit, space};
-
-named!(
-    rest_of_line<&str>,
-    do_parse!(
-        content: map_res!(
-            nom::not_line_ending,
-            str::from_utf8
-        ) >>
-        line_ending >>
-        (content)
-    )
-);
-
-named!(
-    compiling<()>,
-    do_parse!(
-      ws!(tag!("Compiling")) >>
-      rest_of_line >>
-      ()
-    )
-);
-
-named!(
-    downloading<()>,
-    do_parse!(
-      ws!(tag!("Downloading")) >>
-      rest_of_line >>
-      ()
-    )
-);
-
-named!(
-  installing<()>,
-    do_parse!(
-      ws!(tag!("Installing")) >>
-      rest_of_line >>
-      ()
-    )
-);
-
-named!(
-    updating<()>,
-      do_parse!(
-        ws!(tag!("Updating")) >>
-        rest_of_line >>
-        ()
-      )
-);
-
-named!(
-    finished<()>,
-    do_parse!(
-        ws!(tag!("Finished")) >>
-        rest_of_line >>
-        ()
-    )
-);
+use header::cargo_header;
+use utility_parsers::rest_of_line;
 
 named!(
     suite_line<&str>,
@@ -338,9 +287,7 @@ named!(
 named!(
     pub cargo_test_result_parser<Vec<Suite > >,
     do_parse!(
-        many0!(
-          alt!(updating | downloading | installing | compiling | finished)
-        ) >>
+        cargo_header >>
         suites: alt!(suites_parser | compile_error) >>
         (suites)
     )
@@ -351,50 +298,15 @@ mod tests {
     use nom::IResult;
     use std::fmt::Debug;
 
-    use super::{downloading, compiling, installing, finished, suite_line, suite_count,
-                ok_or_failed, Test, test_result, test_results, digits, suite_result, SuiteResult,
-                fail_line, failure, Failure, failures};
+    use super::{suite_line, suite_count, ok_or_failed, Test, test_result,
+                test_results, digits, suite_result, SuiteResult, fail_line,
+                failure, Failure, failures};
 
     fn assert_done<R: PartialEq + Debug>(l: IResult<&[u8], R>, r: R) {
         assert_eq!(
             l,
             IResult::Done(&b""[..], r)
         )
-    }
-
-    #[test]
-    fn it_should_parse_a_downloading_line() {
-        let output = &b" Downloading nvpair-sys v0.1.0
-"[..];
-
-        assert_done(downloading(output), ())
-    }
-
-    #[test]
-    fn it_should_parse_an_installing_line() {
-        let output = &b" Installing cargo-test-junit v0.6.2
-"[..];
-
-        assert_done(installing(output), ())
-    }
-
-    #[test]
-    fn it_should_match_a_compiler_line() {
-        let output = &b"   Compiling docker-command v0.1.0 (file:///Users/joegrund/projects/docker-command-rs)
-"
-            [..];
-
-        assert_done(compiling(output), ());
-    }
-
-    #[test]
-    fn it_should_parse_finish_line() {
-        let result = finished(
-            &b"    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-"[..],
-        );
-
-        assert_done(result, ());
     }
 
     #[test]
