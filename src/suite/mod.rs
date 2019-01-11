@@ -10,14 +10,14 @@ use self::result_line::{SuiteResult, suite_result};
 use self::failure::{fail_opt, Failure};
 
 #[derive(Debug, PartialEq)]
-pub struct Test<'a, 'b, 'c> {
-    pub name: &'a str,
-    pub status: &'b str,
-    pub error: Option<&'c str>,
+pub struct Test {
+    pub name: String,
+    pub status: String,
+    pub error: Option<String>,
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Suite<'a, 'b, 'c, 'd, 'e> {
+pub struct Suite<'a, 'b> {
     pub name: &'a str,
     pub state: &'b str,
     pub passed: i64,
@@ -25,28 +25,28 @@ pub struct Suite<'a, 'b, 'c, 'd, 'e> {
     pub ignored: i64,
     pub measured: i64,
     pub total: i64,
-    pub tests: Vec<Test<'c, 'd, 'e>>,
+    pub tests: Vec<Test>,
 }
 
-fn find_message_by_name<'a, 'b>(name: &str, failures: &Vec<Failure<'a, 'b>>) -> Option<&'b str> {
-    failures.iter().find(|x| x.name == name).map(|x| x.error)
+fn find_message_by_name(name: &str, failures: &Vec<Failure>) -> Option<String> {
+    failures.iter().find(|x| x.name == name).map(|x| x.error.to_string())
 }
 
-fn handle_parsed_suite<'a, 'b, 'c, 'd, 'e>(
+fn handle_parsed_suite<'a, 'b, 'e>(
     name: &'a str,
-    tests: Vec<Test<'c, 'd, 'e>>,
+    tests: Vec<Test>,
     failures: Option<Vec<Failure<'e, 'e>>>,
     result: SuiteResult<'b>,
-) -> Suite<'a, 'b, 'c, 'd, 'e> {
+) -> Suite<'a, 'b> {
     let tests_with_failures = match failures {
         Some(xs) => {
             tests
                 .iter()
                 .map(|t| {
                     Test {
-                        error: find_message_by_name(t.name, &xs),
-                        name: t.name,
-                        status: t.status,
+                        error: find_message_by_name(&t.name, &xs),
+                        name: t.name.to_string(),
+                        status: t.status.to_string(),
                     }
                 })
                 .collect()
@@ -78,8 +78,8 @@ named!(
         tag!(" ...") >>
         status: ws!(ok_or_failed) >>
         (Test {
-            name: name,
-            status: status,
+            name: name.to_string(),
+            status: status.to_string(),
             error: None
         })
     )
@@ -170,8 +170,8 @@ mod tests {
         assert_done(
             result,
             Test {
-                name: "it_runs_a_command",
-                status: "pass",
+                name: "it_runs_a_command".to_string(),
+                status: "pass".to_string(),
                 error: None,
             },
         );
@@ -193,23 +193,23 @@ test tests::it_should_parse_suite_line ... FAILED
 
             vec![
                 Test {
-                    name: "tests::it_should_parse_first_line",
-                    status: "pass",
+                    name: "tests::it_should_parse_first_line".to_string(),
+                    status: "pass".to_string(),
                     error: None
                 },
                 Test {
-                    name: "tests::it_should_parse_a_status_line",
-                    status: "pass",
+                    name: "tests::it_should_parse_a_status_line".to_string(),
+                    status: "pass".to_string(),
                     error: None
                 },
                 Test {
-                    name: "tests::it_should_parse_test_output",
-                    status: "pass",
+                    name: "tests::it_should_parse_test_output".to_string(),
+                    status: "pass".to_string(),
                     error: None
                 },
                 Test {
-                    name: "tests::it_should_parse_suite_line",
-                    status: "fail",
+                    name: "tests::it_should_parse_suite_line".to_string(),
+                    status: "fail".to_string(),
                     error: None
                 }
             ],

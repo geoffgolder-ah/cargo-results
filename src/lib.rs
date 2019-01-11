@@ -37,8 +37,8 @@ named!(
         measured: 0,
         tests: vec![
           Test {
-            name: "compile failed",
-            status: "fail",
+            name: "compile failed".to_string(),
+            status: "fail".to_string(),
             error: Some(error.into())
           }
         ]

@@ -35,13 +35,13 @@ test tests::it_should_parse_first_line ... ok
             state: "pass",
             tests: vec![
                 Test {
-                    name: "tests::it_should_match_failed",
-                    status: "pass",
+                    name: "tests::it_should_match_failed".to_string(),
+                    status: "pass".to_string(),
                     error: None
                 },
                 Test {
-                    name: "tests::it_should_parse_first_line",
-                    status: "pass",
+                    name: "tests::it_should_parse_first_line".to_string(),
+                    status: "pass".to_string(),
                     error: None
                 }
             ],
@@ -117,18 +117,18 @@ error: test failed";
                 total: 3,
                 tests: vec![
                     Test {
-                        name: "fail",
-                        status: "fail",
-                        error: Some("thread \'fail\' panicked at \'assertion failed: `(left == right)` (left: `1`, right: `2`)\', tests/integration_test.rs:16")
+                        name: "fail".to_string(),
+                        status: "fail".to_string(),
+                        error: Some("thread \'fail\' panicked at \'assertion failed: `(left == right)` (left: `1`, right: `2`)\', tests/integration_test.rs:16".to_string())
                     },
                     Test {
-                        name: "fail2",
-                        status: "fail",
-                        error: Some("thread \'fail2\' panicked at \'assertion failed: `(left == right)` (left: `3`, right: `2`)\', tests/integration_test.rs:22")
+                        name: "fail2".to_string(),
+                        status: "fail".to_string(),
+                        error: Some("thread \'fail2\' panicked at \'assertion failed: `(left == right)` (left: `3`, right: `2`)\', tests/integration_test.rs:22".to_string())
                     },
                     Test {
-                        name: "it_runs_a_command",
-                        status: "pass",
+                        name: "it_runs_a_command".to_string(),
+                        status: "pass".to_string(),
                         error: None
                     }
                 ]
@@ -186,8 +186,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out";
                 total: 1,
                 tests: vec![
                     Test {
-                        name: "it_runs_a_command",
-                        status: "pass",
+                        name: "it_runs_a_command".to_string(),
+                        status: "pass".to_string(),
                         error: None
                     }
                 ]
@@ -325,18 +325,18 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
                 total: 3,
                 tests: vec![
                     Test {
-                        name: "bindgen_test_layout_zpool_handle",
-                        status: "pass",
+                        name: "bindgen_test_layout_zpool_handle".to_string(),
+                        status: "pass".to_string(),
                         error: None
                     },
                     Test {
-                        name: "tests::open_close_handle",
-                        status: "pass",
+                        name: "tests::open_close_handle".to_string(),
+                        status: "pass".to_string(),
                         error: None
                     },
                     Test {
-                        name: "tests::pool_search_import_list_export",
-                        status: "pass",
+                        name: "tests::pool_search_import_list_export".to_string(),
+                        status: "pass".to_string(),
                         error: None
                     }
                 ]
@@ -509,8 +509,8 @@ To learn more, run the command again with --verbose.
                 total: 1,
                 tests: vec![
                     Test {
-                        name: "compile failed",
-                        status: "fail",
+                        name: "compile failed".to_string(),
+                        status: "fail".to_string(),
                         error: Some("binary operation `==` cannot be applied to type `std::result::Result<nvpair::NvData, std::io::Error>`
    --> libzfs/src/lib.rs:134:9
     |
@@ -525,7 +525,7 @@ error: aborting due to previous error
 error: Could not compile `libzfs`.
 
 To learn more, run the command again with --verbose.
-")
+".to_string())
                     },
                 ]
             }
