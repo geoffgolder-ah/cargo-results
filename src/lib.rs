@@ -14,35 +14,42 @@ use suite::suites_parser;
 named!(
   compile_error<Vec<Suite > >,
   do_parse!(
-    ws!(tag!("error")) >>
-    opt_res!(
+    vector: many_till!(
       do_parse!(
-        char!('[') >>
-        take_until_and_consume!("]") >>
-        ()
-      )
-    ) >>
-    ws!(char!(':')) >>
-    error: map_res!(
-            take_till!(|c| c == 0x0),
-            str::from_utf8
+        ws!(tag!("error")) >>
+        opt_res!(
+          do_parse!(
+            char!('[') >>
+            take_until_and_consume!("]") >>
+            ()
+          )
         ) >>
-    (vec![Suite {
-        name: "unknown".to_string(),
-        state: "fail".to_string(),
-        total: 1,
-        passed: 0,
-        failed: 1,
-        ignored: 0,
-        measured: 0,
-        tests: vec![
-          Test {
-            name: "compile failed".to_string(),
-            status: "fail".to_string(),
-            error: Some(error.into())
-          }
-        ]
-    }])
+        ws!(char!(':')) >>
+        error: map_res!(
+                take_until!("\nerror"),
+                str::from_utf8
+            ) >>
+        (Suite {
+            name: "unknown".to_string(),
+            state: "fail".to_string(),
+            total: 1,
+            passed: 0,
+            failed: 1,
+            ignored: 0,
+            measured: 0,
+            tests: vec![
+              Test {
+                name: "compile failed".to_string(),
+                status: "fail".to_string(),
+                error: Some(error.into())
+              }
+            ]
+        })
+      ),
+      tag!("\nerror: aborting due to previous error")
+    ) >>
+    take_till!(|c| c == 0x0) >>
+    (vector.0)
   )
 );
 

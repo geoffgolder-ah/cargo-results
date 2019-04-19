@@ -519,12 +519,6 @@ To learn more, run the command again with --verbose.
     |
     = note: an implementation of `std::cmp::PartialEq` might be missing for `std::result::Result<nvpair::NvData, std::io::Error>`
     = note: this error originates in a macro outside of the current crate
-
-error: aborting due to previous error
-
-error: Could not compile `libzfs`.
-
-To learn more, run the command again with --verbose.
 ".to_string())
                     },
                 ]
