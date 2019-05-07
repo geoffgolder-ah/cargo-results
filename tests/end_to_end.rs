@@ -209,7 +209,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out";
 #[test]
 fn test_full_run() {
     let output = b"    Updating registry `https://github.com/rust-lang/crates.io-index`
- Downloading nvpair-sys v0.1.0
+ Downloaded nvpair-sys v0.1.0
  Downloading bindgen v0.30.0
  Downloading pkg-config v0.3.9
  Downloading clap v2.27.1
