@@ -19,6 +19,15 @@ named!(
 );
 
 named!(
+    downloaded<()>,
+    do_parse!(
+      ws!(tag!("Downloaded")) >>
+      rest_of_line >>
+      ()
+    )
+);
+
+named!(
   installing<()>,
     do_parse!(
       ws!(tag!("Installing")) >>
@@ -49,7 +58,7 @@ named!(
     pub cargo_header<()>,
     do_parse!(
         many0!(
-            alt!(updating | downloading | installing | compiling | finished)
+            alt!(updating | downloading | downloaded | installing | compiling | finished)
         ) >>
         ()
     )
@@ -60,7 +69,7 @@ mod tests {
     use nom::IResult;
     use std::fmt::Debug;
     
-    use super::{updating, downloading, compiling, installing, finished, cargo_header};
+    use super::{updating, downloading, downloaded, compiling, installing, finished, cargo_header};
 
     fn assert_done<R: PartialEq + Debug>(l: IResult<&[u8], R>, r: R) {
         assert_eq!(
@@ -75,6 +84,14 @@ mod tests {
 "[..];
 
         assert_done(updating(output), ());
+    }
+
+        #[test]
+    fn it_should_parse_a_downloaded_line() {
+        let output = &b" Downloaded nvpair-sys v0.1.0
+"[..];
+
+        assert_done(downloaded(output), ())
     }
     
     #[test]
@@ -112,7 +129,7 @@ mod tests {
     #[test]
     fn it_should_parse_a_full_header() {
         let output = &b"    Updating registry `https://github.com/rust-lang/crates.io-index`
- Downloading nvpair-sys v0.1.0
+ Downloaded nvpair-sys v0.1.0
  Downloading bindgen v0.30.0
  Downloading pkg-config v0.3.9
  Downloading clap v2.27.1
