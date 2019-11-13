@@ -1,64 +1,45 @@
 use utility_parsers::rest_of_line;
 
 named!(
+    blocking<()>,
+    do_parse!(ws!(tag!("Blocking")) >> rest_of_line >> ())
+);
+
+named!(
     compiling<()>,
-    do_parse!(
-      ws!(tag!("Compiling")) >>
-      rest_of_line >>
-      ()
-    )
+    do_parse!(ws!(tag!("Compiling")) >> rest_of_line >> ())
 );
 
 named!(
     downloading<()>,
-    do_parse!(
-      ws!(tag!("Downloading")) >>
-      rest_of_line >>
-      ()
-    )
+    do_parse!(ws!(tag!("Downloading")) >> rest_of_line >> ())
 );
 
 named!(
     downloaded<()>,
-    do_parse!(
-      ws!(tag!("Downloaded")) >>
-      rest_of_line >>
-      ()
-    )
+    do_parse!(ws!(tag!("Downloaded")) >> rest_of_line >> ())
 );
 
 named!(
-  installing<()>,
-    do_parse!(
-      ws!(tag!("Installing")) >>
-      rest_of_line >>
-      ()
-    )
+    installing<()>,
+    do_parse!(ws!(tag!("Installing")) >> rest_of_line >> ())
 );
 
 named!(
     updating<()>,
-      do_parse!(
-        ws!(tag!("Updating")) >>
-        rest_of_line >>
-        ()
-      )
+    do_parse!(ws!(tag!("Updating")) >> rest_of_line >> ())
 );
 
 named!(
     finished<()>,
-    do_parse!(
-        ws!(tag!("Finished")) >>
-        rest_of_line >>
-        ()
-    )
+    do_parse!(ws!(tag!("Finished")) >> rest_of_line >> ())
 );
 
 named!(
     pub cargo_header<()>,
     do_parse!(
         many0!(
-            alt!(updating | downloading | downloaded | installing | compiling | finished)
+            alt!(blocking | updating | downloading | downloaded | installing | compiling | finished)
         ) >>
         ()
     )
@@ -68,14 +49,12 @@ named!(
 mod tests {
     use nom::IResult;
     use std::fmt::Debug;
-    
-    use super::{updating, downloading, downloaded, compiling, installing, finished, cargo_header};
 
+    use super::{
+        blocking, cargo_header, compiling, downloaded, downloading, finished, installing, updating,
+    };
     fn assert_done<R: PartialEq + Debug>(l: IResult<&[u8], R>, r: R) {
-        assert_eq!(
-            l,
-            IResult::Done(&b""[..], r)
-        )
+        assert_eq!(l, IResult::Done(&b""[..], r))
     }
 
     #[test]
@@ -86,14 +65,13 @@ mod tests {
         assert_done(updating(output), ());
     }
 
-        #[test]
+    #[test]
     fn it_should_parse_a_downloaded_line() {
         let output = &b" Downloaded nvpair-sys v0.1.0
 "[..];
 
         assert_done(downloaded(output), ())
     }
-    
     #[test]
     fn it_should_parse_a_downloading_line() {
         let output = &b" Downloading nvpair-sys v0.1.0
@@ -122,8 +100,15 @@ mod tests {
     fn it_should_parse_a_finished_line() {
         let output = &b"    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
 "[..];
-        
         assert_done(finished(output), ());
+    }
+
+    #[test]
+    fn it_should_parse_a_blocking_line() {
+        let output = &b"    Blocking waiting for file lock on package cache
+"[..];
+
+        assert_done(blocking(output), ());
     }
 
     #[test]
