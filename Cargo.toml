@@ -1,6 +1,6 @@
 [package]
 name = "cargo-results"
-version = "0.6.1"
+version = "0.6.2"
 authors = ["Connor Wood <connorwood71@gmail.com"]
 keywords = ["test", "cargo"]
 license = "MIT"
