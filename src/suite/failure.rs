@@ -1,8 +1,6 @@
 use std::str;
 use nom::line_ending;
 
-use utility_parsers::rest_of_line;
-
 #[derive(Debug, PartialEq)]
 pub struct Failure<'a, 'b> {
     pub name: &'a str,
@@ -27,7 +25,7 @@ named!(
     failure<Failure>,
     do_parse!(
         name: fail_line >>
-        error: rest_of_line >>
+        error: map_res!(take_until!("\n\n"), str::from_utf8) >>
         opt!(
             tag!("note: Run with `RUST_BACKTRACE=1` for a backtrace.")
         ) >>
