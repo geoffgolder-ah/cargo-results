@@ -25,7 +25,10 @@ named!(
         measured: digits >>
         tag!("measured;") >>
         digits >>
-        ws!(tag!("filtered out")) >>
+        ws!(tag!("filtered out;")) >>
+        ws!(tag!("finished in")) >>
+        take_until!("s") >>
+        ws!(char!('s')) >>
         (SuiteResult {
           state:state,
           passed:passed,
@@ -54,7 +57,7 @@ mod tests {
     #[test]
     fn it_should_parse_a_suite_result() {
         let result = suite_result(
-            &b"test result: FAILED. 3 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out"[..],
+            &b"test result: FAILED. 3 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"[..],
         );
 
         assert_done(

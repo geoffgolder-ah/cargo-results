@@ -25,7 +25,7 @@ named!(
     failure<Failure>,
     do_parse!(
         name: fail_line >>
-        error: map_res!(take_until!("\n\n"), str::from_utf8) >>
+        error: map_res!(take_until!("\n"), str::from_utf8) >>
         opt!(
             tag!("note: Run with `RUST_BACKTRACE=1` for a backtrace.")
         ) >>
@@ -143,7 +143,7 @@ failures:
         fail
         fail2
 
-test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 "[..];
 
         assert_left(fail_opt(output),
@@ -157,7 +157,7 @@ test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out
                             error: "thread 'fail2' panicked at 'assertion failed: `(left == right)` (left: `3`, right: `2`)', tests/integration_test.rs:22",
                         },
                     ]),
-        &b"test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out
+        &b"test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 "[..]);
     }
 }
